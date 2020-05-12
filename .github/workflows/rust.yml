@@ -1,0 +1,73 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-amd64-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: rust-cargo
+      uses: actions-rs/cargo@v1.0.1
+      with:
+       command: build
+       toolchain: nightly
+       target: x86_64-unknown-linux-gnu
+       args: --release
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: prebuilt-amd64-linux
+       path: target/release/*
+  build-amd64-win32:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: rust-cargo
+      uses: actions-rs/cargo@v1.0.1
+      with:
+       command: build
+       toolchain: nightly
+       target: x86_64-pc-windows-gnu
+       args: --release
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: prebuilt-amd64-win32
+       path: target/release/*
+  build-armv7:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: rust-cargo
+      uses: actions-rs/cargo@v1.0.1
+      with:
+       command: build
+       toolchain: nightly
+       target: armv7-unknown-linux-gnueabihf 
+       args: --release
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: prebuilt-armv7
+       path: target/release/*
+  build-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: rust-cargo
+      uses: actions-rs/cargo@v1.0.1
+      with:
+       command: build
+       toolchain: nightly
+       target: aarch64-unknown-linux-gnu
+       args: --release
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: prebuilt-aarch64
+       path: target/release/*
