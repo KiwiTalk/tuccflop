@@ -2,7 +2,7 @@ use cursive::{CursiveExt, Cursive};
 use cursive::views::*;
 use cursive::view::*;
 use cursive::utils::markup::StyledString;
-use cursive::theme::{Style, ColorStyle, ColorType, Color};
+use cursive::theme::*;
 use std::ops::{Deref, DerefMut};
 use loco::internal::LoginData;
 
@@ -27,9 +27,8 @@ impl DerefMut for Screen {
 impl Screen {
 	pub fn init() -> Self {
 		let mut cursive = Cursive::default();
-		let log = DebugView::new();
+		let log = TextView::empty().with_name("log");
 		cursive.add_fullscreen_layer(log);
-		cursive.refresh();
 		Self {
 			cursive
 		}
@@ -48,7 +47,7 @@ impl Screen {
 				.padding_lrtb(1,1,1,1)
 				.button("확인", |s| {
 					s.call_on_name("status", |v: &mut TextView| v.set_content(
-						StyledString::single_span("로그인중이심시오", Color::parse("light_green").unwrap().into())
+						StyledString::single_span("로그인중이심시오", Color::Light(BaseColor::Green).into())
 					));
 					let email = s.call_on_name("email", |v: &mut EditView| v.get_content()).unwrap().to_string();
 					let password = s.call_on_name("password", |v: &mut EditView| v.get_content()).unwrap().to_string();
@@ -64,6 +63,7 @@ impl Screen {
 						force
 					);
 					let response = crate::CLIENT.lock().unwrap().request_login(&login_data);
+					s.call_on_name("log", |v: &mut TextView| v.append(format!("{:?}\r\n", &response)));
 					println!("{:?}", &response);
 					match response {
 						Ok(login_access_data) => {
@@ -78,7 +78,7 @@ impl Screen {
 										},
 										_ => "알수없는 오류"
 									}
-									, Color::parse("red").unwrap().into())
+									, Color::Dark(BaseColor::Red).into())
 							));
 							match login_access_data.status {
 								-100 => {
@@ -104,18 +104,22 @@ impl Screen {
 		list_view.add_child("PASSCODE",
 							EditView::new()
 								.on_edit(
-									|s, content: &str, length| {
-										if content.parse::<u8>().is_err() {
-											s.call_on_name("passcode", |v: &mut EditView| v.remove(1));
+									|s, content, length| {
+										if length == 0 {
+											return;
+										}
+										if !content.chars().last().unwrap().is_ascii_digit() {
+											s.call_on_name("passcode", |v: &mut EditView| v.set_content(&content[0..content.len()-1]));
 										}
 									}
 								)
+								.max_content_width(4)
 								.with_name("passcode")
-								.fixed_width(4)
+								.fixed_width(5)
 		);
 		cursive.add_layer(
 			Dialog::around(list_view.fixed_width(40))
-				.title("로그인하심시오")
+				.title("PASSCODE 입력하심시오")
 				.padding_lrtb(1,1,1,1)
 				.button("확인", |s| {})
 		);

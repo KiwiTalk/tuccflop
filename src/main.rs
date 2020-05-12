@@ -24,7 +24,9 @@ fn main() {
 
 fn get_uuid() -> String {
 	let data_path = home_dir().unwrap().join(".tuccflop");
-	create_dir(&data_path);
+	match create_dir(&data_path) {
+		_ => {}
+	}
 	let uuid_path = data_path.join("uuid.txt");
 	match read_to_string(&uuid_path) {
 		Ok(s) => s,
@@ -32,8 +34,8 @@ fn get_uuid() -> String {
 			let s = Uuid::new_v4().to_hyphenated().to_string();
 			match File::create(uuid_path) {
 				Ok(mut file) => file.write_all(s.as_bytes()),
-				Err(e) => panic!(e)
-			};
+				Err(e) => panic!("{:?}", e)
+			}.expect("ee");
 			s
 		}
 	}
