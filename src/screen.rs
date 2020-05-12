@@ -4,7 +4,7 @@ use cursive::view::*;
 use cursive::utils::markup::StyledString;
 use cursive::theme::*;
 use std::ops::{Deref, DerefMut};
-use loco::internal::LoginData;
+use loco::internal::{LoginData, DeviceRegisterData};
 
 pub struct Screen {
 	cursive: Cursive
@@ -53,7 +53,7 @@ impl Screen {
 					let password = s.call_on_name("password", |v: &mut EditView| v.get_content()).unwrap().to_string();
 					let permanent = s.call_on_name("permanent", |v: &mut Checkbox| v.is_checked()).unwrap();
 					let force = s.call_on_name("force", |v: &mut Checkbox| v.is_checked()).unwrap();
-					let login_data = LoginData::new(
+					s.set_user_data(LoginData::new(
 						email.to_owned(),
 						password.to_owned(),
 						&crate::get_uuid(),
@@ -61,8 +61,9 @@ impl Screen {
 						"10.0".to_string(), //TODO
 						permanent,
 						force
-					);
-					let response = crate::CLIENT.lock().unwrap().request_login(&login_data);
+					));
+					let login_data: &LoginData = s.user_data().unwrap();
+					let response = crate::CLIENT.lock().unwrap().request_login(login_data);
 					s.call_on_name("log", |v: &mut TextView| v.append(format!("{:?}\r\n", &response)));
 					println!("{:?}", &response);
 					match response {
@@ -72,7 +73,7 @@ impl Screen {
 									match login_access_data.status {
 										12 => "비번틀렸심시오",
 										30 => "없는아이디심시오",
-										-100 => "기기등록않대있심시오",
+										-100 => "",
 										0 => {
 											""
 										},
@@ -90,6 +91,10 @@ impl Screen {
 									}).dismiss_button("취소").padding_lrtb(1,1,1,1);
 									s.add_layer(dialog);
 								},
+								0 => {
+									s.quit();
+									println!("{:?}", &login_access_data);
+								}
 								_ => {}
 							}
 						},
@@ -100,6 +105,14 @@ impl Screen {
 	}
 
 	pub fn register_device(cursive: &mut Cursive) {
+		let login_data = cursive.take_user_data().unwrap();
+		let response = crate::CLIENT.lock().unwrap().request_passcode(&login_data);
+		cursive.call_on_name("log", |v: &mut TextView| v.append(format!("{:?}\r\n", &response)));
+		println!("{:?}", &response);
+		cursive.set_user_data(DeviceRegisterData::new(
+							  login_data,
+			"0000".to_owned()
+		));
 		let mut list_view = ListView::new();
 		list_view.add_child("PASSCODE",
 							EditView::new()
@@ -113,18 +126,49 @@ impl Screen {
 										}
 									}
 								)
+								.on_submit(|s, passcode| {
+									if passcode.len() != 4 {
+										s.call_on_name("status_passcode",
+											|v: &mut TextView| {
+												v.set_content(
+													StyledString::single_span(
+														"4글자입니다 휴먼",
+														Color::Dark(BaseColor::Red).into()
+													)
+												)
+											}
+										);
+										return;
+									}
+									let device_register_data: &mut DeviceRegisterData = s.user_data().unwrap();
+									device_register_data.passcode = passcode.to_owned();
+									let response = crate::CLIENT.lock().unwrap().register_device(&device_register_data).unwrap();
+									let text: String = response.text().unwrap(); //TODO handle
+									s.call_on_name("log", |v: &mut TextView| v.append(format!("{:?}\r\n", &text)));
+									println!("{:?}", &text);
+									if text == "{\"status\":-111}" {
+										s.pop_layer();
+									}
+								})
 								.max_content_width(4)
 								.with_name("passcode")
 								.fixed_width(5)
 		);
+		list_view.add_child("", TextView::empty().with_name("status_passcode"));
 		cursive.add_layer(
 			Dialog::around(list_view.fixed_width(40))
 				.title("PASSCODE 입력하심시오")
 				.padding_lrtb(1,1,1,1)
-				.button("확인", |s| {})
+				.button("PASSCODE 다시받기", |s| {
+					let login_data: &DeviceRegisterData = &s.user_data().unwrap();
+					let response = crate::CLIENT.lock().unwrap().request_passcode(login_data);
+					s.call_on_name("log", |v: &mut TextView| v.append(format!("{:?}\r\n", &response)));
+					println!("{:?}", &response);
+				})
 		);
 	}
 
+	#[allow(dead_code)]
 	pub fn dialog<S: ToString>(&mut self, message: S) {
 		let dialog = Dialog::around(TextView::new(message.to_string())).button("확인했심시오", |s| {
 			s.pop_layer();
