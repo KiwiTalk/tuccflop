@@ -11,13 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        target: x86_64-unknown-linux-gnu
+        override: true
     - name: rust-cargo
       uses: actions-rs/cargo@v1.0.1
       with:
        command: build
-       toolchain: nightly
-       target: x86_64-unknown-linux-gnu
-       args: --release
+       args: --release --target x86_64-unknown-linux-gnu
     - name: upload artifact
       uses: actions/upload-artifact@v2
       with:
@@ -27,13 +30,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        target: x86_64-unknown-linux-gnu
+        override: true
     - name: rust-cargo
       uses: actions-rs/cargo@v1.0.1
       with:
        command: build
-       toolchain: nightly
-       target: x86_64-pc-windows-gnu
-       args: --release
+       args: --release --target x86_64-unknown-linux-gnu
     - name: upload artifact
       uses: actions/upload-artifact@v2
       with:
@@ -43,13 +49,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        target: x86_64-unknown-linux-gnu
+        override: true
     - name: rust-cargo
       uses: actions-rs/cargo@v1.0.1
       with:
        command: build
-       toolchain: nightly
-       target: armv7-unknown-linux-gnueabihf 
-       args: --release
+       args: --release --target x86_64-unknown-linux-gnu
     - name: upload artifact
       uses: actions/upload-artifact@v2
       with:
@@ -59,13 +68,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        target: x86_64-unknown-linux-gnu
+        override: true
     - name: rust-cargo
       uses: actions-rs/cargo@v1.0.1
       with:
        command: build
-       toolchain: nightly
-       target: aarch64-unknown-linux-gnu
-       args: --release
+       args: --release --target x86_64-unknown-linux-gnu
     - name: upload artifact
       uses: actions/upload-artifact@v2
       with:
