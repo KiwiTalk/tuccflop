@@ -18,25 +18,8 @@ lazy_static! {
 
 fn main() {
 	let mut screen = screen::Screen::init();
-	while true {
-		let login_data = screen.get_login_data();
-		let mut response = CLIENT.lock().unwrap().request_login(&login_data);
-		screen.log(&format!("{:?}", response));
-		match response {
-			Ok(login_access_data) => {
-				match login_access_data.status {
-					12 => screen.dialog("비번틀렸심시오"),
-					30 => screen.dialog("없는아이디심시오"),
-					-100 => screen.dialog("기기등록않대있심시오"),
-					0 => break,
-					_ => {}
-				}
-			},
-			Err(e) => panic!(e)
-		}
-	}
-	screen.get_login_data();
-	screen.get_login_data();
+	screen.login();
+	screen.run();
 }
 
 fn get_uuid() -> String {
