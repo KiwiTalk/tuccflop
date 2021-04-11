@@ -931,7 +931,7 @@ dependencies = [
 [[package]]
 name = "loco"
 version = "0.1.0"
-source = "git+https://github.com/KiwiTalk/loco.rs#d685f2f2baef9423af38c429eccdca166fa3ce1e"
+source = "git+https://github.com/KiwiTalk/loco.rs#aa9adbdb6fe996375781c259ea37afdf02b61961"
 dependencies = [
  "bincode",
  "bson",
@@ -955,7 +955,7 @@ dependencies = [
 [[package]]
 name = "loco-derive"
 version = "0.1.0"
-source = "git+https://github.com/KiwiTalk/loco.rs#d685f2f2baef9423af38c429eccdca166fa3ce1e"
+source = "git+https://github.com/KiwiTalk/loco.rs#aa9adbdb6fe996375781c259ea37afdf02b61961"
 dependencies = [
  "bson",
  "quote",
@@ -1163,9 +1163,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.3.1"
+version = "1.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1c601810575c99596d4afc46f78a678c80105117c379eb3650cf99b8a21ce5b"
+checksum = "af8b08b04175473088b46763e51ee54da5f9a164bc162f615b91bc179dbf15a3"
 
 [[package]]
 name = "opaque-debug"
@@ -1460,12 +1460,13 @@ dependencies = [
 
 [[package]]
 name = "ring"
-version = "0.16.17"
+version = "0.16.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5911690c9b773bab7e657471afc207f3827b249a657241327e3544d79bcabdd"
+checksum = "3053cf52e236a3ed746dfc745aa9cacf1b791d846bdaf412f60a8d7d6e17c8fc"
 dependencies = [
  "cc",
  "libc",
+ "once_cell",
  "spin",
  "untrusted",
  "web-sys",
@@ -2029,9 +2030,9 @@ dependencies = [
 
 [[package]]
 name = "webpki"
-version = "0.21.3"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab146130f5f790d45f82aeeb09e55a256573373ec64409fc19a6fb82fb1032ae"
+checksum = "f095d78192e208183081cc07bc5515ef55216397af48b873e5edcd72637fa1bd"
 dependencies = [
  "ring",
  "untrusted",
