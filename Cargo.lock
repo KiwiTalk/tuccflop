@@ -896,7 +896,7 @@ dependencies = [
 [[package]]
 name = "loco"
 version = "0.1.0"
-source = "git+https://github.com/KiwiTalk/loco.rs#aa9adbdb6fe996375781c259ea37afdf02b61961"
+source = "git+https://github.com/KiwiTalk/loco.rs#6cec6ae634b56684165dbd206fd2b91ab54d3261"
 dependencies = [
  "bincode",
  "bson",
@@ -920,7 +920,7 @@ dependencies = [
 [[package]]
 name = "loco-derive"
 version = "0.1.0"
-source = "git+https://github.com/KiwiTalk/loco.rs#aa9adbdb6fe996375781c259ea37afdf02b61961"
+source = "git+https://github.com/KiwiTalk/loco.rs#6cec6ae634b56684165dbd206fd2b91ab54d3261"
 dependencies = [
  "bson",
  "quote",
