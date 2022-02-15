@@ -11,7 +11,7 @@ dirs = "4.0"
 uuid = { version = "0.8", features = ["v4"] }
 whoami = "1.1.5"
 loco = { git = "https://github.com/KiwiTalk/loco.rs" }
-async-std = "1.6.2"
+async-std = "1.6.3"
 lazy_static = "1.4"
 
 [dependencies.cursive]
