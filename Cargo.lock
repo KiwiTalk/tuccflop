@@ -358,8 +358,8 @@ dependencies = [
 
 [[package]]
 name = "cursive"
-version = "0.18.0"
-source = "git+https://github.com/gyscos/cursive#4a9e51c315b6c510d38d9a3975f3500bfb023b6a"
+version = "0.19.0"
+source = "git+https://github.com/gyscos/cursive#80e32cf4a5230e7362f196b7fd678bf924a9a9ae"
 dependencies = [
  "ahash",
  "cfg-if 1.0.0",
@@ -376,8 +376,8 @@ dependencies = [
 
 [[package]]
 name = "cursive_core"
-version = "0.3.3"
-source = "git+https://github.com/gyscos/cursive#4a9e51c315b6c510d38d9a3975f3500bfb023b6a"
+version = "0.3.4"
+source = "git+https://github.com/gyscos/cursive#80e32cf4a5230e7362f196b7fd678bf924a9a9ae"
 dependencies = [
  "ahash",
  "crossbeam-channel",
