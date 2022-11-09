@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 dirs = "4.0"
 uuid = { version = "1.2", features = ["v4"] }
-whoami = "1.2.1"
+whoami = "1.2.3"
 loco = { git = "https://github.com/KiwiTalk/loco.rs" }
 async-std = "1.6.3"
 lazy_static = "1.4"
